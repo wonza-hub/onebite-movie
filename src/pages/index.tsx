@@ -24,11 +24,6 @@ export default function Home({
   allMovies,
   recommendedMovies,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(allMovies);
-
-  useEffect(() => {
-    console.log(window);
-  }, []);
 
   return (
     <div>
