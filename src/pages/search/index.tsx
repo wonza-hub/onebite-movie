@@ -1,11 +1,27 @@
 import SearchableLayout from "@/components/searchable-layout";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import movies from "@/mock/data/movies.json";
 import MovieItem from "@/components/movie-item";
 import style from "@/pages/index.module.css";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import fetchMovies from "@/lib/fetch-movies";
 
-export default function Page() {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const q = context.query.q as string;
+  const movies = await fetchMovies(q);
+
+  return {
+    props: {
+      movies,
+    },
+  };
+};
+
+export default function Page({
+  movies,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const q = router.query.q;
 

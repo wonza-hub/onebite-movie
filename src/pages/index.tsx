@@ -1,57 +1,45 @@
 import SearchableLayout from "@/components/searchable-layout";
-import { ReactNode, useEffect } from "react";
+import { useRouter } from "next/router";
+import { ReactNode } from "react";
 import MovieItem from "@/components/movie-item";
-import style from "./index.module.css";
-import { InferGetServerSidePropsType } from "next";
+import style from "@/pages/index.module.css";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import fetchMovies from "@/lib/fetch-movies";
-import fetchRandomMovies from "@/lib/fetch-random-movies";
 
-export const getServerSideProps = async () => {
-  const [allMovies, recommendedMovies] = await Promise.all([
-    fetchMovies(),
-    fetchRandomMovies(),
-  ]);
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const q = context.query.q as string;
+  const movies = await fetchMovies(q);
 
   return {
     props: {
-      allMovies,
-      recommendedMovies,
+      movies,
     },
   };
 };
 
-export default function Home({
-  allMovies,
-  recommendedMovies,
+export default function Page({
+  movies,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(allMovies);
+  const router = useRouter();
+  const q = router.query.q;
 
-  useEffect(() => {
-    console.log(window);
-  }, []);
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(q as string)
+  );
 
   return (
-    <div>
-      <section>
-        <h3>지금 추천하는 영화</h3>
-        <div className={style.recommend_movie_list}>
-          {recommendedMovies.slice(0, 3).map((movie) => (
-            <MovieItem key={movie.id} {...movie} />
-          ))}
-        </div>
-      </section>
-      <section>
-        <h3>등록된 모든 영화</h3>
-        <div className={style.all_movie_list}>
-          {allMovies.map((movie) => (
-            <MovieItem key={movie.id} {...movie} />
-          ))}
-        </div>
-      </section>
-    </div>
+    <>
+      <div className={style.recommend_movie_list}>
+        {filteredMovies.map((movie) => (
+          <MovieItem key={movie.id} {...movie} />
+        ))}
+      </div>
+    </>
   );
 }
 
-Home.getLayout = (page: ReactNode) => {
+Page.getLayout = (page: ReactNode) => {
   return <SearchableLayout>{page}</SearchableLayout>;
 };
