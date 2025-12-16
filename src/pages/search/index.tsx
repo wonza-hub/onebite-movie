@@ -1,38 +1,54 @@
 import SearchableLayout from "@/components/searchable-layout";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import MovieItem from "@/components/movie-item";
 import style from "@/pages/index.module.css";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import {
+  GetServerSidePropsContext,
+  GetStaticPropsContext,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+} from "next";
 import fetchMovies from "@/lib/fetch-movies";
+import { MovieData } from "@/types";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const q = context.query.q as string;
-  const movies = await fetchMovies(q);
+// export const getServerSideProps = async (
+//   context: GetServerSidePropsContext
+// ) => {
+//   const q = context.query.q as string;
+//   const movies = await fetchMovies(q);
 
-  return {
-    props: {
-      movies,
-    },
-  };
-};
+//   return {
+//     props: {
+//       movies,
+//     },
+//   };
+// };
 
-export default function Page({
-  movies,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+// export default function Page({
+//   movies,
+// }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Page() {
+  // SSG + 클라이언트 렌더링 방식
+  const [movies, setMovies] = useState<MovieData[]>([]);
+
   const router = useRouter();
   const q = router.query.q;
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(q as string)
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      if (q) {
+        const movies = await fetchMovies(q as string);
+        setMovies(movies);
+      }
+    };
+    fetchData();
+  }, [q]);
 
   return (
     <>
       <div className={style.recommend_movie_list}>
-        {filteredMovies.map((movie) => (
+        {movies.map((movie) => (
           <MovieItem key={movie.id} {...movie} />
         ))}
       </div>
