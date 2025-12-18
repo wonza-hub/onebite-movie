@@ -1,4 +1,6 @@
-# Next.js (Pages Router)
+# Next.js
+
+한 입 크기로 잘라먹는 Next.js (이정환) 강의를 수강하며 Pages Router, App Router 버전 각각에 대해 '영화 조회 앱'을 구상하고 학습한 내용을 블로그에 정리하였습니다.
 
 ## 폴더 구조
 
