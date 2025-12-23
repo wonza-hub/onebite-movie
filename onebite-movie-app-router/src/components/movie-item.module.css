@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  color: black;
+  text-decoration: none;
+}
+
+.container img {
+  object-fit: cover;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.subTitle {
+  word-break: keep-all;
+}
+
+.company {
+  color: gray;
+}
