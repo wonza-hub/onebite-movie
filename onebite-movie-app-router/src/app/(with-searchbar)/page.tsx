@@ -3,7 +3,9 @@ import style from "./page.module.css";
 import { MovieData } from "@/types";
 
 async function AllMovies() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
+    next: { revalidate: 3600 },
+  });
   if (!response.ok) {
     return <div>Failed to fetch movies</div>;
   }
@@ -21,7 +23,8 @@ async function AllMovies() {
 
 async function RecommendMovies() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/movie/random`
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/random`,
+    { cache: "no-store" }
   );
   if (!response.ok) {
     return <div>Failed to fetch recommended movies</div>;

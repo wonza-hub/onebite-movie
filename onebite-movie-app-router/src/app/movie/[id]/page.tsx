@@ -8,7 +8,10 @@ export default async function Page({
 }) {
   const { id } = await params;
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`,
+    {
+      cache: "force-cache",
+    }
   );
   if (!response.ok) {
     return <div>Failed to fetch movie</div>;
