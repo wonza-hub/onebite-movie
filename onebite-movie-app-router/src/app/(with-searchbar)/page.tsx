@@ -4,7 +4,7 @@ import { MovieData } from "@/types";
 
 async function AllMovies() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
-    next: { revalidate: 3600 },
+    cache: "force-cache",
   });
   if (!response.ok) {
     return <div>Failed to fetch movies</div>;
@@ -24,7 +24,7 @@ async function AllMovies() {
 async function RecommendMovies() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/movie/random`,
-    { cache: "no-store" }
+    { next: { revalidate: 3 } }
   );
   if (!response.ok) {
     return <div>Failed to fetch recommended movies</div>;
