@@ -15,13 +15,10 @@ export default async function createReviewAction(_: any, formData: FormData) {
   }
 
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/review/1`,
-      {
-        method: "POST",
-        body: JSON.stringify({ movieId, content, author }),
-      }
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review`, {
+      method: "POST",
+      body: JSON.stringify({ movieId, content, author }),
+    });
     if (!response.ok) {
       throw new Error(response.statusText);
     }
