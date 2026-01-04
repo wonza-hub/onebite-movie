@@ -3,6 +3,7 @@ import style from "./page.module.css";
 import { notFound } from "next/navigation";
 import ReviewItem from "@/components/review-item";
 import ReviewEditor from "@/components/review-editor";
+import Image from "next/image";
 
 // export const dynamicParams = false;
 
@@ -48,7 +49,12 @@ async function MovieDetail({ movieId }: { movieId: string }) {
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
       >
-        <img src={posterImgUrl} />
+        <Image
+          src={posterImgUrl}
+          width={240}
+          height={300}
+          alt={`영화 ${title}의 썸네일`}
+        />
       </div>
       <div className={style.info_container}>
         <div>
